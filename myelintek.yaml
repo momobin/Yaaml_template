@@ -1,0 +1,41 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: myelintek-deployment
+  labels:
+    app: myelintek
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myelintek
+  template:
+    metadata:
+      labels:
+        app: myelintek
+    spec:
+      containers:
+      - name: myelintek
+        image: myelintek/web:dnnfarm-1.0
+        command: [ "/bin/bash", "-c", "service ssh start;sh /usr/local/bin/digits-devserver; sleep 2147483647" ]
+        ports:
+        - containerPort: 22
+        - containerPort: 80
+      nodeSelector:
+        gputype: v1004
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myelintek
+  labels:
+    app: myelintek
+spec:
+  ports:
+  - name: ssh
+    port: 22
+  - name: web
+    port: 80
+  selector:
+    app: myelintek
+  type: NodePort
