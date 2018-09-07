@@ -21,8 +21,34 @@ spec:
         ports:
         - containerPort: 22
         - containerPort: 80
+        volumeMounts: 
+        - name: nvidia-driver
+          mountPath: /usr/local/nvidia
+          readOnly: true
+        - name: libcuda-so
+          mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so
+        - name: libcuda-so-1
+          mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+        - name: libcuda-so-384-66
+          mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.384.81
+        resources:
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: {{.GpuCnt}}
       nodeSelector:
         gputype: v1004
+      volumes:
+      - name: nvidia-driver
+        hostPath:
+          path: /opt/nvidia
+      - name: libcuda-so
+        hostPath:
+          path: /opt/nvidia/lib64/libcuda.so
+      - name: libcuda-so-1
+        hostPath:
+          path: /opt/nvidia/lib64/libcuda.so.1
+      - name: libcuda-so-384-66
+        hostPath:
+          path: /opt/nvidia/lib64/libcuda.so.384.81
 ---
 apiVersion: v1
 kind: Service
