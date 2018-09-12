@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tensorflow-daemonSet
+  labels:
+    app: tensorflow-ds
+spec:
+  selector:
+    matchLabels:
+      app: tensorflow-ds
+  template:
+    metadata:
+      labels:
+        app: tensorflow-ds
+    spec:
+      containers:
+      - name: tensorflow-ds
+        image: tensorflow/tensorflow:latest-gpu
+        ports:
+        - containerPort: 80
+        command: [ "/bin/bash", "-c", "sleep 2147483647" ]
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+      nodeSelector:
+        type: gpu
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tensorflow-ds
+  labels:
+    app: tensorflow-ds
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: tensorflow-ds
+  type: NodePort
