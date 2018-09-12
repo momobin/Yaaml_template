@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: tensorflow-daemonSet
+  name: tf_ds
   labels:
-    app: tensorflow-ds
+    app: tf_ds
 spec:
   selector:
     matchLabels:
-      app: tensorflow-ds
+      app: tf_ds
   template:
     metadata:
       labels:
-        app: tensorflow-ds
+        app: tf_ds
     spec:
       containers:
-      - name: tensorflow-ds
+      - name: tf_ds
         image: tensorflow/tensorflow:latest-gpu
         ports:
         - containerPort: 80
@@ -28,13 +28,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tensorflow-ds
+  name: tf_ds
   labels:
-    app: tensorflow-ds
+    app: tf_ds
 spec:
   ports:
   - port: 80
     protocol: TCP
   selector:
-    app: tensorflow-ds
+    app: tf_ds
   type: NodePort
