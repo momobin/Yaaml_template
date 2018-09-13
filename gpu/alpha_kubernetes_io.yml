@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gou-pod
+  labels:
+    machine: gou-pod
+spec:
+  containers:
+  - name: dnn
+    image: 10.241.1.11:30001/tensorflow:2018v002
+    command: [ "/bin/bash", "-c", "service ssh start;sh /adduser.sh; sleep 2147483647" ]
+    ports:
+    - containerPort: 22
+    - containerPort: 1010
+    - containerPort: 1011
+    - containerPort: 1025 # Jupyter Notebook
+    - containerPort: 5000 # Digits web
+    env:
+    - name: username
+      value: "A60144"
+    - name: password
+      value: "1234"
+    volumeMounts:
+    - name: nfs
+      mountPath: "/data"
+    - name: utils
+      mountPath: "/utils"
+    - name: nvidia-driver
+      mountPath: /usr/local/nvidia
+      readOnly: true
+    - name: libcuda-so
+      mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so
+      readOnly: true
+    - name: libcuda-so-1
+      mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+      readOnly: true
+    - name: libcuda-so-384-66
+      mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.384.81
+      readOnly: true
+    resources:
+      limits:
+        alpha.kubernetes.io/nvidia-gpu: 1
+  restartPolicy: Always
+  volumes:
+    - name: nfs
+      nfs:
+        server: 10.241.1.11
+        path: "/nfs/e1cbd43e70ca7f5401cccac3980042da"
+    - name: utils
+      nfs:
+        server: 10.241.1.11
+        path: "/nfs/utils"
+    - name: nvidia-driver
+      hostPath:
+        path: /var/lib/nvidia-docker/volumes/nvidia_driver/384.81
+    - name: libcuda-so
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so
+    - name: libcuda-so-1
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+    - name: libcuda-so-384-66
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so.384.81
+  nodeSelector:
+    gputype: v1004
+----
+metadata:
+  name: gou-pod
+  labels:
+    machine: gou-pod
+spec:
+  ports:
+  - name: ssh
+    port: 22
+  - name: port1
+    port: 1010
+  - name: port2
+    port: 1011
+  - name: port3 # Jupyter Notebook
+    port: 1025
+  - name: port4 # Digits web
+    port: 5000
+  selector:
+    machine: gou-pod
+
