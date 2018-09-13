@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: gou-pod
+  name: gpu-pod
   labels:
-    machine: gou-pod
+    machine: gpu-pod
 spec:
   containers:
-  - name: dnn
+  - name: gpu-pod
     image: 10.241.1.11:30001/tensorflow:2018v002
     command: [ "/bin/bash", "-c", "service ssh start;sh /adduser.sh; sleep 2147483647" ]
     ports:
@@ -66,9 +66,9 @@ spec:
     gputype: v1004
 ----
 metadata:
-  name: gou-pod
+  name: gpu-pod
   labels:
-    machine: gou-pod
+    machine: gpu-pod
 spec:
   ports:
   - name: ssh
@@ -82,5 +82,5 @@ spec:
   - name: port4 # Digits web
     port: 5000
   selector:
-    machine: gou-pod
+    machine: gpu-pod
 
