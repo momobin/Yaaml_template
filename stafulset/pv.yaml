@@ -3,8 +3,6 @@ kind: PersistentVolume
 metadata:
   name: my-storage-class-pv
 spec:
-  capacity:
-    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -12,7 +10,5 @@ spec:
   storageClassName: my-storage-class
   capacity:
     storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
   hostPath:
     path: "/mnt/data"
