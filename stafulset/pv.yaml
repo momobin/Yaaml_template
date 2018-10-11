@@ -10,9 +10,9 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: my-storage-class
-  mountOptions:
-    - hard
-    - nfsvers=4.1
-  nfs:
-    path: /tmp
-    server: 172.17.0.2
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
